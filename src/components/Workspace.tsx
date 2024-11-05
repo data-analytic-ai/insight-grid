@@ -2,12 +2,11 @@
 
 
 import {CreateMessage, Message, useChat, UseChatHelpers} from 'ai/react';
-import React, {createContext, useCallback, useContext, useEffect} from "react";
+import React, {createContext, useCallback, useContext,} from "react";
 import {ensureMessageId, ensureToolResult} from "@/lib/utils/util";
 import Ide from "@/components/ide";
 import InteractiveCanvas from "@/components/InteractiveCanvas";
 import {useSession} from "next-auth/react";
-import {verifyUserExistsInDb} from "@/lib/utils/stateService";
 
 // TODO: support public/private DBs that live in the cloud
 export type Visibility = 'local' | 'public' | 'private'
@@ -72,7 +71,7 @@ export default function Workspace({
         return <div>Por favor, inicia sesión para acceder.</div>;
     }
 
-    useEffect(() => {
+   /* useEffect(() => {
         const verifyAndFetchState = async () => {
             try {
                 if (!userId) return console.error('No userId found');
@@ -92,7 +91,7 @@ export default function Workspace({
         };
 
         verifyAndFetchState();
-    }, [userId]);
+    }, [userId]);*/
 
 
     const {messages, setMessages, append, stop} = useChat({
