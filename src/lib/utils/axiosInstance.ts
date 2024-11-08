@@ -7,6 +7,8 @@ const axiosInstance = axios.create({
     baseURL: apiUrl,
 });
 
+axiosInstance.defaults.withCredentials = true;
+
 // Interceptor para añadir el token a cada petición
 axiosInstance.interceptors.request.use(async (config) => {
     const session = await getSession();
