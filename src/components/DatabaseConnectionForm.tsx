@@ -6,6 +6,8 @@ import {Database, Server, User, Key} from 'lucide-react';
 import {FormStateContext} from '@/store/form-state-provider';
 import {useSession} from "next-auth/react";
 import axiosInstance from '@/lib/utils/axiosInstance';
+import { v4 as uuidv4 } from 'uuid';
+
 
 interface DatabaseConnectionFormProps {
 }
@@ -15,6 +17,7 @@ const databaseManagers = [
     {value: 'mysql', label: 'MySQL', defaultPort: 3306},
     {value: 'sqlserver', label: 'SQL Server', defaultPort: 1433},
     {value: 'oracle', label: 'Oracle', defaultPort: 1521},
+    {value: 'db2', label: 'DB2', defaultPort: 50000},
 ];
 
 interface FormData {
@@ -26,6 +29,7 @@ interface FormData {
     password: string;
     sid?: string;
     instance?: string;
+    connectionId?: string;
 }
 
 const DatabaseConnectionForm: React.FC<DatabaseConnectionFormProps> = () => {
@@ -56,6 +60,7 @@ const DatabaseConnectionForm: React.FC<DatabaseConnectionFormProps> = () => {
         password: '',
         sid: '',
         instance: '',
+        connectionId: '',
     });
 
     const [error, setError] = useState<string | null>(null);
@@ -87,7 +92,17 @@ const DatabaseConnectionForm: React.FC<DatabaseConnectionFormProps> = () => {
         setError(null);
         setLoading(true);
 
+        // Generar connectionId si no está asignado
+        const connectionId = formData.connectionId || uuidv4();
+
+        // Actualizar formData con el connectionId
+        setFormData((prev) => ({
+            ...prev,
+            connectionId: connectionId,
+        }));
+
         const connectionData = {
+            connectionId: connectionId,
             databaseType: formData.databaseType,
             host: formData.host,
             port: formData.port,
@@ -114,7 +129,7 @@ const DatabaseConnectionForm: React.FC<DatabaseConnectionFormProps> = () => {
 
             if (response.status === 200) {
                 // Actualiza el contexto con la conexión establecida
-                setConnected(true, connectionData);
+                setConnected(true, connectionData, connectionData.connectionId);
                 // Opcional: limpiar el formulario o realizar otras acciones
                 // setFormData({
                 //     databaseType: '',
@@ -142,17 +157,14 @@ const DatabaseConnectionForm: React.FC<DatabaseConnectionFormProps> = () => {
     const InputField = ({icon: Icon, ...props}: any) => (
         <div
             className="mb-4 flex items-center border rounded-md px-2"
-            onKeyDown={(e) => e.stopPropagation()}
-            onMouseDown={(e) => e.stopPropagation()}
-            onWheel={(e) => e.stopPropagation()}
+            //onKeyDown={(e) => e.stopPropagation()}
+           // onMouseDown={(e) => e.stopPropagation()}
+            //onWheel={(e) => e.stopPropagation()}
         >
             <Icon className="text-gray-400 mr-2"/>
-            <input
-                {...props}
-                className="w-full py-2 outline-none bg-transparent"
-                data-no-drag
-                data-no-pan
-            />
+            <input className="w-full py-2 outline-none bg-transparent" {...props}>
+
+           </input>
         </div>
     );
 

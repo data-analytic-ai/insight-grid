@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useState, ReactNode, useCallback } from 'react';
+import React, {createContext, useState, ReactNode, useCallback, useEffect} from 'react';
 
-interface ConnectionData {
+interface DbConnectionData {
     databaseType: string;
     host: string;
     port: number | '';
@@ -15,48 +15,42 @@ interface ConnectionData {
 
 interface FormState {
     isConnected: boolean;
-    connectionData: ConnectionData;
+    connectionData: DbConnectionData | null;
+    connectionId: string | null;
+    setConnected: (isConnected: boolean, connectionData: DbConnectionData | null, connectionId: string) => void;
 }
 
 interface FormStateContextType extends FormState {
-    setConnected: (connected: boolean, connectionData?: ConnectionData) => void;
+    setConnected:(isConnected: boolean, connectionData: DbConnectionData | null, connectionId: string) => void;
 }
 
 export const FormStateContext = createContext<FormStateContextType | undefined>(undefined);
 
 export const FormStateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isConnected, setIsConnected] = useState<boolean>(false);
-    const [connectionData, setConnectionData] = useState<ConnectionData>({
-        databaseType: '',
-        host: 'localhost',
-        port: '',
-        databaseName: '',
-        userName: '',
-        password: '',
-        sid: '',
-        instance: '',
-    });
+    useEffect(() => {
+        const storedConnectionId = localStorage.getItem('connectionId');
+        if (storedConnectionId) {
+            setConnectionId(storedConnectionId);
+            setIsConnected(true);
+            // Opcionalmente, puedes recuperar y establecer connectionData desde localStorage
 
-    const setConnected = useCallback((connected: boolean, data?: ConnectionData) => {
-        setIsConnected(connected);
-        if (connected && data) {
-            setConnectionData(data);
-        } else {
-            setConnectionData({
-                databaseType: '',
-                host: 'localhost',
-                port: '',
-                databaseName: '',
-                userName: '',
-                password: '',
-                sid: '',
-                instance: '',
-            });
         }
     }, []);
 
+
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const [connectionData, setConnectionData] = useState<DbConnectionData | null>(null);
+    const [connectionId, setConnectionId] = useState<string | null>(null);
+
+    const setConnected = ((isConnected: boolean, connectionData: DbConnectionData | null, connectionId: string) => {
+        setIsConnected(isConnected);
+        setConnectionData(connectionData);
+        setConnectionId(connectionId);
+        localStorage.setItem('connectionId', connectionId);
+    });
+
     return (
-        <FormStateContext.Provider value={{ isConnected, connectionData, setConnected }}>
+        <FormStateContext.Provider value={{ isConnected, connectionData, setConnected, connectionId }}>
             {children}
         </FormStateContext.Provider>
     );

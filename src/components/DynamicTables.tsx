@@ -20,7 +20,7 @@ export default function DynamicTables() {
     if (!formStateContext) {
         throw new Error("DynamicTables must be used within a FormStateProvider");
     }
-    const { isConnected } = formStateContext;
+    const { isConnected, connectionId } = formStateContext;
     const [tables, setTables] = useState<string[]>([]);
     const [selectedTables, setSelectedTables] = useState<string[]>([]);
     const [selectedTableData, setSelectedTableData] = useState<Record<string, any>>({});
@@ -35,14 +35,14 @@ export default function DynamicTables() {
                 return;
             }
 
-            if (!isConnected) {
-                // No hay conexión, no intentar obtener tablas
+            if (!connectionId) {
+                setError('No connection ID found. Please connect to the database.');
                 return;
             }
 
             setLoading(true);
             try {
-                const response = await axiosInstance.get('/query/bridge/database/listTables');
+                const response = await axiosInstance.get(`/query/bridge/database/listTables/${connectionId}`);
                 setTables(response.data || []);
                 console.log('Tables:', response.data);
             } catch (error: any) {
@@ -69,6 +69,11 @@ export default function DynamicTables() {
             return;
         }
 
+        if (!connectionId) {
+            setError('No connection ID found. Please connect to the database.');
+            return;
+        }
+
         if (!isConnected) {
             setError('No connection established. Please connect to the database.');
             return;
@@ -79,7 +84,7 @@ export default function DynamicTables() {
 
         for (const tableName of selectedTables) {
             try {
-                const response = await axiosInstance.get(`/query/bridge/database/data/${tableName}?page=${newPage}&size=${size}`);
+                const response = await axiosInstance.get(`/query/bridge/database/data/${connectionId}/${tableName}?page=${newPage}&size=${size}`);
                 if (response.data) {
                     newTableData[tableName] = {
                         columns: response.data.columns,
@@ -97,7 +102,7 @@ export default function DynamicTables() {
 
         setSelectedTableData(newTableData);
         setLoading(false);
-    }, [selectedTables, status, isConnected]);
+    }, [selectedTables, status, isConnected, connectionId]);
 
     useEffect(() => {
         if (selectedTables.length) {
@@ -137,13 +142,13 @@ export default function DynamicTables() {
                     {error}
                 </div>
             )}
-            <div className="mb-4">
+            <div className="mb-4  bg-background">
                 <label htmlFor="table-select" className="block text-gray-800">Tablas</label>
                 <Select onValueChange={handleSelectTable}>
                     <SelectTrigger className="w-full bg-gray-200 px-3 py-2 border border-gray-300 rounded-md">
                         <SelectValue className={"text-black"} placeholder={selectedTables.length ? selectedTables.join(', ') : "Selecciona una tabla"} />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className={"bg-background"}>
                         <SelectGroup>
                             <SelectLabel>Tablas</SelectLabel>
                             {tables.map((table) => (
