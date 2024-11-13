@@ -3,7 +3,7 @@
 
 import {CreateMessage, Message, useChat, UseChatHelpers} from 'ai/react';
 import React, {createContext, useCallback, useContext,} from "react";
-import {ensureMessageId, ensureToolResult} from "@/lib/utils/util";
+import {ensureMessageId, ensureToolResult} from "@/lib/utils/message-util";
 import Ide from "@/components/ide";
 import InteractiveCanvas from "@/components/InteractiveCanvas";
 import {useSession} from "next-auth/react";
