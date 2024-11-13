@@ -46,7 +46,11 @@ export const FormStateProvider: React.FC<{ children: ReactNode }> = ({ children 
         setIsConnected(isConnected);
         setConnectionData(connectionData);
         setConnectionId(connectionId);
-        localStorage.setItem('connectionId', connectionId);
+        if (isConnected && connectionId) {
+            localStorage.setItem('connectionId', connectionId);
+        } else {
+            localStorage.removeItem('connectionId');
+        }
     });
 
     return (
