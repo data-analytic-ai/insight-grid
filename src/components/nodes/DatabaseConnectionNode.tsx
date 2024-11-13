@@ -1,47 +1,147 @@
-import React, { memo, useContext } from 'react';
-import { Handle, NodeResizeControl, Position } from '@xyflow/react';
+import React, { memo, useState } from 'react';
+import {Handle, NodeResizer, Position, useReactFlow} from '@xyflow/react';
+import {Database, Plus, ArrowLeft} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import DatabaseConnectionForm from '../DatabaseConnectionForm';
 import DynamicTables from '@/components/DynamicTables';
-import { FormStateContext } from "@/store/form-state-provider";
 
 const DatabaseConnectionNode = ({ id, data }) => {
-    console.log('Rendering DatabaseConnectionNode:', id);
-    const formStateContext = useContext(FormStateContext);
-    if (!formStateContext) {
-        throw new Error("DatabaseConnectionNode must be used within a FormStateProvider");
-    }
-    const { isConnected } = formStateContext;
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
+    const [connectionId, setConnectionId] = useState(null);
+    const [, setConnectionData] = useState(null);
 
-    return (
+    const toggleExpand = () => setIsExpanded(!isExpanded);
+
+    // Obtener y aplicar el ancho y alto desde data
+    const width = data.width || 300;
+    const height = data.height || 150;
+    // Obtener setNodes para actualizar los nodos
+    const { setNodes } = useReactFlow();
+
+    // Manejador de redimensionamiento
+    const onResize = (event, params) => {
+        setNodes((nodes) =>
+            nodes.map((node) => {
+                if (node.id === id) {
+                    return {
+                        ...node,
+                        data: {
+                            ...node.data,
+                            width: params.width,
+                            height: params.height,
+                        },
+                    };
+                }
+                return node;
+            })
+        );
+    };
+
+    const handleBack = () => {
+        // Resetear el estado de conexión
+        setIsConnected(false);
+        setConnectionId(null);
+        setConnectionData(null);
+    };
+
+    const handleCreateNewConnection = () => {
+        // Resetear el estado de conexión para crear una nueva
+        setIsConnected(false);
+        setConnectionId(null);
+        setConnectionData(null);
+    };
+
+    const lineStyle = {border: '2px solid #e5e7eb', borderRadius: '20px'};
+
+    return(
         <div
-            className="flex-1"
-            style={{ padding: 10, border: '1px solid #ccc', borderRadius: 5 }}
+            className="relative"
+
         >
-            {!isConnected ? (
-                <DatabaseConnectionForm />
-            ) : (
-                <div>
-                    {/* Renderiza el explorador del esquema de la base de datos */}
-                    <DynamicTables />
-                    <p>Database Schema Explorer by for-devs.com</p>
-                </div>
-            )}
-            <NodeResizeControl style={{ background: 'transparent', border: 'none' }} minWidth={100} minHeight={50}>
-                <ResizeIcon />
-            </NodeResizeControl>
+            <NodeResizer lineStyle={lineStyle} minWidth={100} minHeight={40} isVisible={id}  />
             <Handle type="target" position={Position.Top} />
+
+            {/* Card Component */}
+            <Card className="w-full h-full">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium flex items-center">
+                        <Database className="w-4 h-4 inline-block mr-2" />
+                        Database Connection
+                    </CardTitle>
+                    <div className="flex items-center space-x-2">
+                        {isConnected && (
+                            <Button variant="ghost" size="sm" onClick={handleBack}>
+                                <ArrowLeft className="w-4 h-4" />
+                            </Button>
+                        )}
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button variant="ghost" size="sm" onClick={toggleExpand}>
+                                        {isExpanded ? 'Collapse' : 'Expand'}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{isExpanded ? 'Collapse node' : 'Expand node for more details'}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                </CardHeader>
+                <CardContent className="overflow-auto h-full">
+                    <AnimatePresence>
+                        {!isConnected ? (
+                            <DatabaseConnectionForm
+                                onConnect={(connData, connId) => {
+                                    setIsConnected(true);
+                                    setConnectionData(connData);
+                                    setConnectionId(connId);
+                                }}
+                            />
+                        ) : (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="h-full"
+                            >
+                                {isExpanded ? (
+                                    <DynamicTables connectionId={connectionId} />
+                                ) : (
+                                    <div className="flex flex-col items-center space-y-2">
+                                        <p className="text-sm text-muted-foreground">
+                                            Connected to database. Expand to view schema.
+                                        </p>
+                                        <Button variant="outline" size="sm" onClick={handleCreateNewConnection}>
+                                            <Plus className="w-4 h-4 mr-1" />
+                                            New Connection
+                                        </Button>
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </CardContent>
+            </Card>
+
             <Handle type="source" position={Position.Bottom} />
         </div>
     );
 };
 
-function areEqual(prevProps, nextProps) {
-    // Solo re-renderizar si 'isConnected' o 'id' cambian
+const areEqual = (prevProps, nextProps) => {
     return (
         prevProps.data.isConnected === nextProps.data.isConnected &&
-        prevProps.id === nextProps.id
+        prevProps.id === nextProps.id &&
+        prevProps.data.width === nextProps.data.width &&
+        prevProps.data.height === nextProps.data.height
     );
-}
+};
 
 export default memo(DatabaseConnectionNode, areEqual);
 
@@ -49,15 +149,15 @@ function ResizeIcon() {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             strokeWidth="2"
-            stroke="#ff0071"
+            stroke="currentColor"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ position: 'absolute', right: 5, bottom: 5 }}
+            className="text-muted-foreground"
         >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <polyline points="16 20 20 20 20 16" />
@@ -67,4 +167,3 @@ function ResizeIcon() {
         </svg>
     );
 }
-export { ResizeIcon };
