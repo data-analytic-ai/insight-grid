@@ -68,12 +68,12 @@ export default function EasyDataTransfer() {
                         <CardTitle>Origen de Datos</CardTitle>
                         <CardDescription>Selecciona la fuente de tus datos</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent >
                         <Select onValueChange={setSourceType}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Selecciona el tipo de origen" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className={"bg-background"}>
                                 <SelectItem value="database">
                                     <DatabaseIcon className="inline-block mr-2" />
                                     Base de Datos
@@ -120,7 +120,7 @@ export default function EasyDataTransfer() {
                             <SelectTrigger>
                                 <SelectValue placeholder="Selecciona el tipo de destino" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent  className={"bg-background"}>
                                 <SelectItem value="database">
                                     <DatabaseIcon className="inline-block mr-2" />
                                     Base de Datos

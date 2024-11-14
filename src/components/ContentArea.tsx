@@ -18,7 +18,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({children}) => {
 
     return (
         <main
-            className={`w-full overflow-auto transition-all duration-300 ease-in-out ${
+            className={`w-full bg-background overflow-auto transition-all duration-300 ease-in-out ${
                 isSidebarCollapsed ? 'ml-0' : 'ml-0'
             } p-0`}
         >

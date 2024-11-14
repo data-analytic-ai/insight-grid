@@ -24,10 +24,8 @@ export default function DataExplorerPage() {
     }
 
     if (!session || status === 'unauthenticated') {
-        return <div>Por favor, inicia sesión para acceder as.</div>;
+        return <div>Por favor, inicia sesión para acceder.</div>;
     }
-
-
 
     return (
         <div className="h-full w-full">

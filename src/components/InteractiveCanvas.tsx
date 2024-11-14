@@ -243,7 +243,7 @@ const LayoutFlow = (newElements: any) => {
                     defaultEdgeOptions={edgeOptions}
                     maxZoom={4}
                     minZoom={0.2}
-                    onNodeDrag={onNodeDrag}
+                   // onNodeDrag={onNodeDrag}
 
                 >
                     <MiniMap
