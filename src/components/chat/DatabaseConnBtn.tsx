@@ -26,11 +26,9 @@ export default function DatabaseConnBtn() {
         <div>
             {databaseConnectionNode && (
                 <button
-                    key={databaseConnectionNode['type']}
                     className="w-full bg-blue-500 text-white px-4 py-2 rounded mb-2"
                     onClick={handleAddNode}
                 >
-                    {databaseConnectionNode['type']}
                 </button>
             )}
         </div>

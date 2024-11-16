@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import {useSession, signIn} from "next-auth/react";
 import {FormStateContext} from "@/store/form-state-provider";
-import ConnectionsManager from "@/components/ConnectionManager";
+import ConnectionsManager from "@/components/DatabaseConnectionManager";
 
 export default function DynamicTables({connectionId}: { connectionId: string }) {
     const {data: session, status} = useSession();
