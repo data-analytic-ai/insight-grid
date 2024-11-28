@@ -45,10 +45,6 @@ const useCanvasStore = create<InteractiveCanvasState>()(
                         const nodes = get().nodes.filter((node) => node.id !== nodeId);
                         set({nodes});
                     },
-                    isConnected: false,
-                    setIsConnected: (connected) => {
-                        set({isConnected: connected});
-                    },
                     setNodeData: (nodeId, data) => {
                         set((state) => {
                             const nodes = state.nodes.map((node) => {

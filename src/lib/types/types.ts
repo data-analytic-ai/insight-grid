@@ -22,8 +22,6 @@ export type InteractiveCanvasState = {
     setEdges: (edges: Edge[]) => void;
     addNode: (node: AppNode) => void;
     removeNode: (nodeId: string) => void;
-    isConnected: boolean;
-    setIsConnected: (connected: boolean) => void;
     setNodeData: (id: string, data: any) => void;
 };
 

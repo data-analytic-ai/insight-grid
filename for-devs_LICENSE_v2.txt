@@ -1,0 +1,24 @@
+Copyright (c) 2024 for-devs
+All rights reserved.
+
+This software and associated documentation files (the "Software") are the exclusive property of for-devs. 
+Unauthorized copying, redistribution, or use of this Software, in source or binary forms, with or without modification, 
+is strictly prohibited unless explicitly permitted by for-devs.
+
+This Software is intended solely for internal use by for-devs. Any contributions to this Software made by third parties 
+are to be:
+- Contracted and compensated by for-devs; or
+- Voluntarily gifted or contributed as part of a community effort.
+
+In all cases, such contributions are understood to become the exclusive property of for-devs, with all rights and ownership 
+retained by for-devs.
+
+If any part of this Software is utilized outside the organization, credit or attribution to for-devs is requested, 
+although this is not strictly enforced.
+
+THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS 
+BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF 
+OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Please contact for-devs at 201-839-7748 for licensing inquiries or permissions.
