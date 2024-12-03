@@ -1,6 +1,5 @@
 'use client';
-// file that is files and api
-// file, api, I don't want them to come out because they are functionalities that we haven't done yet
+
 import { useState } from 'react';
 import {
     Card,
@@ -73,6 +72,16 @@ export default function DataTransfer() {
                                     <DatabaseIcon className="inline-block mr-2" />
                                     Database
                                 </SelectItem>
+                                {/* Commented out as per request
+                                <SelectItem value="file">
+                                    <FileIcon className="inline-block mr-2" />
+                                    File
+                                </SelectItem>
+                                <SelectItem value="api">
+                                    <TableIcon className="inline-block mr-2" />
+                                    API
+                                </SelectItem>
+                                */}
                             </SelectContent>
                         </Select>
                         {/* Conditional rendering for source details */}
@@ -112,6 +121,16 @@ export default function DataTransfer() {
                                     <DatabaseIcon className="inline-block mr-2" />
                                     Database
                                 </SelectItem>
+                                {/* Commented out as per request
+                                <SelectItem value="file">
+                                    <FileIcon className="inline-block mr-2" />
+                                    File
+                                </SelectItem>
+                                <SelectItem value="api">
+                                    <TableIcon className="inline-block mr-2" />
+                                    API
+                                </SelectItem>
+                                */}
                             </SelectContent>
                         </Select>
                         {/* Conditional rendering for destination details */}
