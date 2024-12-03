@@ -1,4 +1,6 @@
 'use client';
+// file that is files and api
+// file, api, I don't want them to come out because they are functionalities that we haven't done yet
 import { useState } from 'react';
 import {
     Card,
@@ -18,18 +20,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import {
-    ArrowRightIcon,
-    DatabaseIcon,
-    FileIcon,
-    TableIcon,
-    CheckCircleIcon,
-    XCircleIcon,
-} from 'lucide-react';
+import { ArrowRightIcon, DatabaseIcon, FileIcon, TableIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import DataTransferComponent from '@/components/datatransfer/DataTransferComponent';
 
-export default function EasyDataTransfer() {
+export default function DataTransfer() {
     const [sourceType, setSourceType] = useState('');
     const [destinationType, setDestinationType] = useState('');
     const [isTransferring, setIsTransferring] = useState(false);
@@ -42,14 +37,14 @@ export default function EasyDataTransfer() {
         setProgress(0);
         setTransferComplete(false);
 
-        // Simulación de transferencia
+        // Transfer simulation
         const interval = setInterval(() => {
             setProgress((prevProgress) => {
                 if (prevProgress >= 100) {
                     clearInterval(interval);
                     setIsTransferring(false);
                     setTransferComplete(true);
-                    // Simular éxito o fallo aleatorio
+                    // Simulate random success or failure
                     setTransferSuccess(Math.random() > 0.2);
                     return 100;
                 }
@@ -60,35 +55,27 @@ export default function EasyDataTransfer() {
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-6">EasyDataTransfer</h1>
+            <h1 className="text-3xl font-bold mb-6">Data Transfer</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Origen de Datos */}
+                {/* Data Source */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Origen de Datos</CardTitle>
-                        <CardDescription>Selecciona la fuente de tus datos</CardDescription>
+                        <CardTitle>Data Source</CardTitle>
+                        <CardDescription>Select your data source</CardDescription>
                     </CardHeader>
                     <CardContent >
                         <Select onValueChange={setSourceType}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Selecciona el tipo de origen" />
+                                <SelectValue placeholder="Select source type" />
                             </SelectTrigger>
                             <SelectContent className={"bg-background"}>
                                 <SelectItem value="database">
                                     <DatabaseIcon className="inline-block mr-2" />
-                                    Base de Datos
-                                </SelectItem>
-                                <SelectItem value="file">
-                                    <FileIcon className="inline-block mr-2" />
-                                    Archivo
-                                </SelectItem>
-                                <SelectItem value="api">
-                                    <TableIcon className="inline-block mr-2" />
-                                    API
+                                    Database
                                 </SelectItem>
                             </SelectContent>
                         </Select>
-                        {/* Condicional para mostrar detalles del origen */}
+                        {/* Conditional rendering for source details */}
                         {sourceType === 'database' ? (
                             <div className="mt-4">
                                 <DataTransferComponent
@@ -97,45 +84,37 @@ export default function EasyDataTransfer() {
                             </div>
                         ) : sourceType ? (
                             <div className="mt-4">
-                                <Label htmlFor="sourceDetails">Detalles del Origen</Label>
+                                <Label htmlFor="sourceDetails">Source Details</Label>
                                 <Input
                                     id="sourceDetails"
-                                    placeholder="Ingresa los detalles del origen"
+                                    placeholder="Enter source details"
                                 />
                             </div>
                         ) : null}
                     </CardContent>
                 </Card>
 
-                {/* Destino de Datos */}
+                {/* Data Destination */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Destino de Datos</CardTitle>
+                        <CardTitle>Data Destination</CardTitle>
                         <CardDescription>
-                            Selecciona dónde quieres transferir tus datos
+                            Select where you want to transfer your data
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Select onValueChange={setDestinationType}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Selecciona el tipo de destino" />
+                                <SelectValue placeholder="Select destination type" />
                             </SelectTrigger>
                             <SelectContent  className={"bg-background"}>
                                 <SelectItem value="database">
                                     <DatabaseIcon className="inline-block mr-2" />
-                                    Base de Datos
-                                </SelectItem>
-                                <SelectItem value="file">
-                                    <FileIcon className="inline-block mr-2" />
-                                    Archivo
-                                </SelectItem>
-                                <SelectItem value="api">
-                                    <TableIcon className="inline-block mr-2" />
-                                    API
+                                    Database
                                 </SelectItem>
                             </SelectContent>
                         </Select>
-                        {/* Condicional para mostrar detalles del destino */}
+                        {/* Conditional rendering for destination details */}
                         {destinationType === 'database' ? (
                             <div className="mt-4">
                                 <DataTransferComponent
@@ -144,10 +123,10 @@ export default function EasyDataTransfer() {
                             </div>
                         ) : destinationType ? (
                             <div className="mt-4">
-                                <Label htmlFor="destinationDetails">Detalles del Destino</Label>
+                                <Label htmlFor="destinationDetails">Destination Details</Label>
                                 <Input
                                     id="destinationDetails"
-                                    placeholder="Ingresa los detalles del destino"
+                                    placeholder="Enter destination details"
                                 />
                             </div>
                         ) : null}
@@ -155,19 +134,19 @@ export default function EasyDataTransfer() {
                 </Card>
             </div>
 
-            {/* Configuración de Transferencia */}
+            {/* Transfer Configuration */}
             <Card className="mt-6">
                 <CardHeader>
-                    <CardTitle>Configuración de Transferencia</CardTitle>
+                    <CardTitle>Transfer Configuration</CardTitle>
                     <CardDescription>
-                        Configura y ejecuta tu transferencia de datos
+                        Configure and execute your data transfer
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-center space-x-4 mb-4">
                         <div className="text-center">
                             <div className="font-semibold">
-                                {sourceType || 'Origen'}
+                                {sourceType || 'Source'}
                             </div>
                             {sourceType === 'database' ? (
                                 <DatabaseIcon className="mx-auto mt-2" />
@@ -182,7 +161,7 @@ export default function EasyDataTransfer() {
                         <ArrowRightIcon className="text-primary" />
                         <div className="text-center">
                             <div className="font-semibold">
-                                {destinationType || 'Destino'}
+                                {destinationType || 'Destination'}
                             </div>
                             {destinationType === 'database' ? (
                                 <DatabaseIcon className="mx-auto mt-2" />
@@ -200,12 +179,12 @@ export default function EasyDataTransfer() {
                         disabled={!sourceType || !destinationType || isTransferring}
                         className="w-full"
                     >
-                        {isTransferring ? 'Transfiriendo...' : 'Iniciar Transferencia'}
+                        {isTransferring ? 'Transferring...' : 'Start Transfer'}
                     </Button>
                     {isTransferring && (
                         <div className="mt-4">
                             <Progress value={progress} className="w-full" />
-                            <p className="text-center mt-2">{progress}% Completado</p>
+                            <p className="text-center mt-2">{progress}% Complete</p>
                         </div>
                     )}
                     {transferComplete && (
@@ -220,13 +199,13 @@ export default function EasyDataTransfer() {
                             )}
                             <AlertTitle>
                                 {transferSuccess
-                                    ? 'Transferencia Exitosa'
-                                    : 'Error en la Transferencia'}
+                                    ? 'Transfer Successful'
+                                    : 'Transfer Error'}
                             </AlertTitle>
                             <AlertDescription>
                                 {transferSuccess
-                                    ? 'Tus datos han sido transferidos correctamente. Puedes ver los detalles en la página de reportes.'
-                                    : 'Ha ocurrido un error durante la transferencia. Por favor, intenta nuevamente o contacta al soporte técnico.'}
+                                    ? 'Your data has been transferred successfully. You can view the details on the reports page.'
+                                    : 'An error occurred during the transfer. Please try again or contact technical support.'}
                             </AlertDescription>
                         </Alert>
                     )}
@@ -235,3 +214,4 @@ export default function EasyDataTransfer() {
         </div>
     );
 }
+
